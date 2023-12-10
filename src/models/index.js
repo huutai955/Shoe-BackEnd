@@ -1,7 +1,5 @@
-import Products from "./products.js";
-import ProductSizes from "./productsizes.js";
-import Sizes from "./size.js";
+import sequelize from "../config/database.js";
+import Product from "./products.js";
+import ProductSize from "./productsizes.js";
+import Size from "./size.js";
 
-
-Products.belongsToMany(Sizes, { through: ProductSizes });
-Sizes.belongsToMany(Products, { through: ProductSizes });

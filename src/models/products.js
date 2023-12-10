@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
 
-const Products = sequelize.define("Product", {
+const Product = sequelize.define("Product", {
     productID: {
         type: DataTypes.UUID,
         primaryKey: true,
@@ -19,5 +19,30 @@ const Products = sequelize.define("Product", {
 })
 
 
+const Size = sequelize.define("Size", {
+    sizeID: {
+        type: DataTypes.DECIMAL(3, 1),
+        primaryKey: true
+    }
+})
 
-export default Products
+
+
+const ProductSize = sequelize.define("ProductSize", {
+    price: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false
+    }
+})
+
+
+Product.belongsToMany(Size, { through: ProductSize });
+Size.belongsToMany(Product, { through: ProductSize });
+
+
+
+export {
+    Product,
+    Size,
+    // ProductSize
+}

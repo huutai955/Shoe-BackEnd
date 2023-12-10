@@ -3,7 +3,9 @@ import * as dotenv from 'dotenv'
 import bodyParser from "body-parser";
 import sequelize from "./config/database.js";
 import { shoeRouter } from './routes/index.js'
+import { DataTypes } from "sequelize";
 dotenv.config();
+
 
 
 const app = express()
@@ -16,7 +18,7 @@ app.use('/api/v1/shoe', shoeRouter)
 app.listen(PORT, async () => {
     try {
         await sequelize.authenticate();
-        await sequelize.sync({ force: true });
+        await sequelize.sync();
         console.log('Connection has been established successfully.');
     } catch (error) {
         console.error('Unable to connect to the database:', error);
