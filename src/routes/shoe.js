@@ -1,75 +1,44 @@
 import express from 'express'
-import { Product, Size } from '../models/products.js';
+import { models } from '../models/index.js';
+import sequelize from '../config/database.js';
+const { Product, Size } = models
+// // import Product from '../models/products.js';
+// // import Size from '../models/size.js';
 
 const router = express.Router();
 
 
-router.post("/", async (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const newProduct = await Products.create(req.body)
-        console.log(newProduct)
-        res.status(201).json({
-            status: 'Success',
-            data: newProduct
-        })
+
+        const result = await sequelize.transaction(async (t) => {
+
+            const product = await Product.create({
+                productName: 'Testing 2'
+            }, { transaction: t })
+            const size = await Size.create({
+                ID: 5
+            }, { transaction: t })
+
+            return {
+                product: product,
+                size: size
+            };
+        });
+        
+        res.send("Success")
+
+        // If the execution reaches this line, the transaction has been committed successfully
+        // `result` is whatever was returned from the transaction callback (the `user`, in this case)
+
     } catch (error) {
         console.log(error)
-        res.send("Errors")
+        // If the execution reaches this line, an error occurred.
+        // The transaction has already been rolled back automatically by Sequelize!
+        res.send("Error")
     }
 })
 
 
-router.get("/", async (req, res) => {
-    const findProduct = Products.findOne({
-        where: {
-            productName: 'Testing'
-        }
-    })
-    res.send("Hello World")
-})
-
-
-router.get("/createsize", async (req, res) => {
-    const size = await Sizes.create({
-        sizeID: 4,
-        size: 4
-    })
-    res.send("Hello world")
-})
-
-// router.get('/createproductsize', async (req, res) => {
-//     await ProductSizes.create({
-//         productID: '329519fa-a17a-4eb9-afe2-3c06771e987a',
-//         sizeID: 3.5,
-//         price: 300
-//     })
-//     res.send('Create product size')
-// })
-
-
-// router.get('/getdetailproduct', async (req, res) => {
-//     const product = await Products.findOne({
-//         where: {
-//             productID: "ccc735e3-44b3-4dbc-89ad-7a5aa3b15e80"
-//         }
-//     });
-//     console.log(product)
-//     res.send("Get detail product")
-// })
-
-
-router.get('/createproduct', async (req, res) => {
-    const product = await Product.create({
-        productName: "Testing 5",
-        releaseDate: '2023-02-07'
-    });
-    const size = await Size.create({
-        sizeID: 4
-    })
-    await product.addSizes(size, { through: { price: 300 } });
-
-
-    res.send("Create product")
-})
 
 export default router
