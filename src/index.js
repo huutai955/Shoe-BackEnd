@@ -21,7 +21,9 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
-    res.send("hello")
+    res.status(401).json({
+        data: "error"
+    })
 })
 
 app.use('/api/v1/shoe', shoeRouter)

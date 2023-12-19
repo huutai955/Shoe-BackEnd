@@ -45,6 +45,8 @@ const ProductSizes = sequelize.define("ProductSizes", {
     }
 })
 
+
+
 Product.belongsToMany(Size, { through: ProductSizes })
 Size.belongsToMany(Product, { through: ProductSizes })
 
