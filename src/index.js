@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 
 app.use('/api/v1/shoe', shoeRouter)
 app.use('/api/v1/auth', authRouter)
-
+console.log("hehe")
 
 app.listen(PORT, async () => {
     try {
