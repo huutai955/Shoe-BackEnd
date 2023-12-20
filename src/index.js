@@ -2,11 +2,12 @@ import express from "express";
 import * as dotenv from 'dotenv'
 import bodyParser from "body-parser";
 import sequelize from "./config/database.js";
-import { shoeRouter, authRouter } from './routes/index.js'
+import { shoeRouter, authRouter } from './routes/index.js';
 import { DataTypes } from "sequelize";
 import https from 'https';
-import cors from 'cors'
-import fs from 'fs'
+import cors from 'cors';
+import fs from 'fs';
+import cryptoJS from "crypto-js";
 dotenv.config();
 const options = {
     key: fs.readFileSync('localhost-key.pem'),
@@ -19,12 +20,6 @@ const server = https.createServer(options, app)
 
 app.use(cors())
 app.use(bodyParser.json())
-
-app.get('/', (req, res) => {
-    res.status(401).json({
-        data: "error"
-    })
-})
 
 app.use('/api/v1/shoe', shoeRouter)
 app.use('/api/v1/auth', authRouter)

@@ -46,11 +46,61 @@ const ProductSizes = sequelize.define("ProductSizes", {
 })
 
 
+const User = sequelize.define("User", {
+    userID: {
+        type: DataTypes.STRING,
+        primaryKey: true
+    },
+    userName: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    password: {
+        type: DataTypes.STRING,
+    },
+    hashPassword: {
+        type: DataTypes.TEXT('long'),
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    phoneNumber: {
+        type: DataTypes.STRING,
+    },
+    avatar: {
+        type: DataTypes.STRING
+    },
+    address: {
+        type: DataTypes.STRING
+    },
+    access_token: {
+        type: DataTypes.STRING
+    },
+    refresh_token: {
+        type: DataTypes.STRING
+    }
+})
+
+const Order = sequelize.define("Order")
+
+const OrderProducts = sequelize.define("OrderProducts", {
+    totalPrice: {
+        type: DataTypes.DECIMAL(9, 2),
+        allowNull: false
+    }
+})
+
 
 Product.belongsToMany(Size, { through: ProductSizes })
 Size.belongsToMany(Product, { through: ProductSizes })
-
+Order.belongsToMany(Product, { through: OrderProducts })
+Product.belongsToMany(Order, { through: OrderProducts })
+User.hasMany(Order);
+Order.belongsTo(User);
 export const models = {
     Product,
-    Size
+    Size,
+    User,
+    Order
 }
